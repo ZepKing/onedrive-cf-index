@@ -135,25 +135,6 @@ function renderVideoPlayer(file, fileExt) {
           })
           </script>`
 }
-                                                                       
-/**
-* Render HTTP Live Streaming video (ts, m3u8 ...)
-*
-* @param {Object} file Object representing the video to preview
-*/
-function renderHLSPlayer(file) {
-return `<div id="dplayer"></div>
-        <script>
-        dp = new DPlayer({
-          container: document.getElementById('dplayer'),
-          theme: '#0070f3',
-          video: {
-            url: '${file['@microsoft.graph.downloadUrl']}',
-            type: 'hls'
-          }
-        })
-        </script>`
-}
 
 /**
  * Render audio (mp3, aac, wav, oga ...)
@@ -215,9 +196,6 @@ async function renderPreview(file, fileExt, cacheUrl) {
 
     case preview.video:
       return renderVideoPlayer(file, fileExt)
-          
-    case preview.hls:
-      return renderHLSPlayer(file, fileExt)
 
     case preview.audio:
       return renderAudioPlayer(file)
