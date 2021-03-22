@@ -7,8 +7,9 @@ export async function getAccessToken() {
   const timestamp = () => {
     return Math.floor(Date.now() / 1000)
   }
+  const refresh_token = await BUCKET.get('REFRESH_TOKEN')
 
-  // Fetch access token
+// Fetch access token
   const data = await BUCKET.get('onedrive', 'json')
   if (data && data.access_token && timestamp() < data.expire_at) {
     console.log('Fetched token from storage.')
@@ -21,7 +22,7 @@ export async function getAccessToken() {
   const resp = await fetch(oneDriveAuthEndpoint, {
     method: 'POST',
     body: `client_id=${config.client_id}&redirect_uri=${config.redirect_uri}&client_secret=${config.client_secret}
-    &refresh_token=${config.refresh_token}&grant_type=refresh_token`,
+    &refresh_token=${refresh_token}&grant_type=refresh_token`,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     }

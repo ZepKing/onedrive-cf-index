@@ -17,8 +17,8 @@ const config = {
     sitePath: null
   },
 
-  refresh_token: REFRESH_TOKEN,
-  client_id: '6600e358-9328-4050-af82-0af9cdde796b',
+  /* refresh_token: REFRESH_TOKEN, */
+  client_id: 'b69f49a8-d0ce-4d93-9b4c-3e251e59760c',
   client_secret: CLIENT_SECRET,
 
   /**
@@ -60,10 +60,10 @@ const config = {
    */
   cache: {
     enable: true,
-    entireFileCacheLimit: 10000000, // 10MB
-    chunkedCacheLimit: 100000000, // 100MB
+    entireFileCacheLimit: 20000000, // 20MB
+    chunkedCacheLimit: 2000000000, // 2000MB
     previewCache: false,
-    paths: ['/🥟%20Some%20test%20files/Previews']
+    paths: ['/Private']
   },
 
   /**
