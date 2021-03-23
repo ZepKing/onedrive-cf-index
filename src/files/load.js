@@ -29,18 +29,24 @@ async function setCache(request, fileSize, downloadUrl, fallback) {
     return resp
   } else if (fileSize < config.cache.chunkedCacheLimit) {
     console.info(`Chunk cache file ${request.url}`)
-    const remoteResp = await fetch(downloadUrl)
+    const remoteResp = await fetch(downloadUrl, {
+      cf: {
+        cacheTtl: 5,
+        cacheEverything: true,
+      }
+    })
     const { readable, writable } = new TransformStream()
     remoteResp.body.pipeTo(writable)
     const resp = new Response(readable, {
       headers: {
         'Content-Type': remoteResp.headers.get('Content-Type'),
-        ETag: remoteResp.headers.get('ETag')
+        ETag: remoteResp.headers.get('ETag'),
+        "Cache-Control": "max-age=1500"
       },
       status: remoteResp.status,
       statusText: remoteResp.statusText
     })
-    await cache.put(request, resp.clone())
+//    await cache.put(request, resp.clone())
     return resp
   } else {
     console.info(`No cache ${request.url} because file_size(${fileSize}) > limit(${config.cache.chunkedCacheLimit})`)

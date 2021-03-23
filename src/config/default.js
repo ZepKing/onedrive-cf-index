@@ -60,9 +60,9 @@ const config = {
    */
   cache: {
     enable: true,
-    entireFileCacheLimit: 20000000, // 20MB
-    chunkedCacheLimit: 2000000000, // 2000MB
-    previewCache: false,
+    entireFileCacheLimit: 20000000, // 20MiB
+    chunkedCacheLimit: 500000000, // 500MiB
+    previewCache: true,
     paths: ['/Private']
   },
 
