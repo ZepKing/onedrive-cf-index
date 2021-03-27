@@ -20,12 +20,12 @@ function getPathLink(pathItems, idx) {
  *
  * @param {string} path current working directory, for instance: /🥑 Course PPT for CS (BIT)/2018 - 大三上 - 操作系统/
  */
-export function renderPath(path) {
+export function renderPath(path, directDl = false) {
   const pathItems = path.split('/')
   pathItems[0] = '/'
   pathItems.pop()
 
-  const link = (href, content) => `<a href="${href}">${content}</a>`
+  const link = (href, content) => `<a href="${href}${directDl ? "?direct": ""}">${content}</a>`
   const breadcrumb = []
   pathItems.forEach((item, idx) => {
     breadcrumb.push(link(getPathLink(pathItems, idx), idx === 0 ? '🚩 Home' : decodeURIComponent(item)))

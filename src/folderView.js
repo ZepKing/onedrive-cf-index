@@ -34,15 +34,15 @@ function readableFileSize(bytes, si) {
  * @param {*} items
  * @param {*} isIndex don't show ".." on index page.
  */
-export async function renderFolderView(items, path, request) {
+export async function renderFolderView(items, path, request, directDl) {
   const isIndex = path === '/'
 
   const el = (tag, attrs, content) => `<${tag} ${attrs.join(' ')}>${content}</${tag}>`
   const div = (className, content) => el('div', [`class=${className}`], content)
-  const item = (icon, fileName, fileAbsoluteUrl, size, emojiIcon) =>
+  const item = (icon, fileName, fileAbsoluteUrl, size, emojiIcon = null, additionalProp = []) =>
     el(
       'a',
-      [`href="${fileAbsoluteUrl}"`, 'class="item"', size ? `size="${size}"` : ''],
+      [`href="${fileAbsoluteUrl}"`, 'class="item"', size ? `size="${size}"` : '', ...additionalProp],
       (emojiIcon ? el('i', ['style="font-style: normal"'], emojiIcon) : el('i', [`class="${icon}"`], '')) +
       fileName +
       el('div', ['style="flex-grow: 1;"'], '') +
@@ -60,7 +60,15 @@ export async function renderFolderView(items, path, request) {
 
   const body = div(
     'container',
-    div('path', renderPath(path)) +
+    div('path', renderPath(path, directDl)) +
+    div(
+      'dltoggle-button-container',
+      el(
+        'a',
+        ['class="dltoggle-button"', directDl ? `href="${path}"` : `href="${path}?direct"`],
+        directDl ? '<i class="far fa-laugh-wink fa-spin"></i> 关闭下载模式' : '<i class="far fa-meh-blank"></i> 打开下载模式'
+      )
+    ) +
     div(
       'items',
       el(
@@ -73,9 +81,9 @@ export async function renderFolderView(items, path, request) {
             if ('folder' in i) {
               const emoji = emojiRegex().exec(i.name)
               if (emoji && !emoji.index) {
-                return item('', i.name.replace(emoji, '').trim(), `${path}${i.name}/`, i.size, emoji[0])
+                return item('', i.name.replace(emoji, '').trim(), `${path}${i.name}/${directDl ? '?direct' : ''}`, i.size, emoji[0])
               } else {
-                return item('far fa-folder', i.name, `${path}${i.name}/`, i.size)
+                return item('far fa-folder', i.name, `${path}${i.name}/${directDl ? '?direct' : ''}`, i.size)
               }
             } else if ('file' in i) {
               // Check if README.md exists
@@ -104,7 +112,14 @@ export async function renderFolderView(items, path, request) {
               } else {
                 fileIcon = `far ${fileIcon}`
               }
-              return item(fileIcon, i.name, `${path}${i.name}`, i.size)
+              return item(
+                fileIcon, 
+                i.name, 
+                `${path}${i.name}${directDl ? '?raw' : ''}`, 
+                i.size, 
+                null, 
+                directDl ? ['target="_blank"'] : []
+              )
             } else {
               console.log(`unknown item type ${i}`)
             }

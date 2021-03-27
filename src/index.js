@@ -59,7 +59,10 @@ function wrapPathName(pathname, isRequestFolder) {
 async function handleRequest(request) {
   if (config.cache && config.cache.enable) {
     const maybeResponse = await cache.match(request)
-    if (maybeResponse) return maybeResponse
+    if (maybeResponse) {
+      console.info('Cache hit!')
+      return maybeResponse
+    }
   }
 
   const accessToken = await getAccessToken()
@@ -74,6 +77,7 @@ async function handleRequest(request) {
   const rawFile = searchParams.get('raw') !== null
   const thumbnail = config.thumbnail ? searchParams.get('thumbnail') : false
   const proxied = config.proxyDownload ? searchParams.get('proxied') !== null : false
+  const directDl = searchParams.get('direct') !== null
 
   if (thumbnail) {
     const url = `${config.apiEndpoint.graph}${config.baseResource}/root${wrapPathName(
@@ -166,7 +170,7 @@ async function handleRequest(request) {
         return Response.redirect(request.url + '/', 302)
       }
 
-      return new Response(await renderFolderView(data.value, neoPathname, request), {
+      return new Response(await renderFolderView(data.value, neoPathname, request, directDl), {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'content-type': 'text/html'
