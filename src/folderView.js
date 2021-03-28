@@ -48,6 +48,7 @@ export async function renderFolderView(items, path, request, directDl) {
       el('div', ['style="flex-grow: 1;"'], '') +
       (fileName === '..' ? '' : el('span', ['class="size"'], readableFileSize(size)))
     )
+  const menuItem = (opName, opUrl) => el('a', [`href="${opUrl}"`], opName)
 
   const intro = `<div class="intro markdown-body" style="text-align: left; margin-top: 2rem;">
                     <p>This is my OneDrive public directory listing. <p>
@@ -62,11 +63,19 @@ export async function renderFolderView(items, path, request, directDl) {
     'container',
     div('path', renderPath(path, directDl)) +
     div(
-      'dltoggle-button-container',
+      'menu-container',
       el(
-        'a',
-        ['class="dltoggle-button"', directDl ? `href="${path}"` : `href="${path}?direct"`],
-        directDl ? '<i class="far fa-laugh-wink fa-spin"></i> 关闭下载模式' : '<i class="far fa-meh-blank"></i> 打开下载模式'
+        'button',
+        ['onclick="toggleDropdown()"', 'class="dropBtn"', 'id=menuBtn'],
+        '<i class="fas fa-bars"></i>'
+      ) + 
+      el(
+        'div',
+        ['id="menu"', 'class="menu"'],
+        menuItem(
+          directDl ? '<i class="far fa-laugh-wink fa-spin"></i> 关闭下载模式' : '<i class="far fa-meh-blank"></i> 打开下载模式',
+          directDl ? `${path}` : `${path}?direct`
+        )
       )
     ) +
     div(
