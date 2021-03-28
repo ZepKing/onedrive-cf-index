@@ -1,6 +1,6 @@
 import { favicon } from './favicon'
 
-const COMMIT_HASH = 'd6179a1'
+const COMMIT_HASH = '2e71ab4'
 
 const pagination = (pIdx, attrs) => {
   const getAttrs = (c, h, isNext) =>
@@ -100,6 +100,34 @@ export function renderHTML(body, pLink, pIdx) {
           if (preBtn) {
             preBtn.addEventListener('click', () => listen({ isNext: false }), { once: true })
           }
+        }
+      </script>
+      <script>
+        function createRipple(event) {
+          var ripples = document.getElementsByClassName("ripple");
+          for (var ripple of ripples) {
+            ripple.remove();
+          }
+
+          const button = event.currentTarget;
+        
+          const circle = document.createElement("span");
+          const diameter = Math.max(button.clientWidth, button.clientHeight);
+          const radius = diameter / 2;
+          const left = event.clientX - button.offsetLeft - radius;
+          const top = event.clientY - button.offsetTop - radius;
+        
+          circle.style.width = circle.style.height = diameter + "px";
+          circle.style.left = left + "px";
+          circle.style.top = top + "px";
+          circle.classList.add("ripple");
+        
+          button.appendChild(circle);
+        }
+        
+        var links = document.getElementsByTagName("a");
+        for (var link of links) {
+          link.addEventListener("click", createRipple);
         }
       </script>
     </body>
