@@ -319,6 +319,8 @@ a.item:hover {
 
 @media (prefers-color-scheme: dark) {
   a.item,
+  .menu a,
+  .fa-bars,
   nav,
   .aplayer .aplayer-info .aplayer-music .aplayer-title,
   .download-button,
@@ -348,9 +350,17 @@ a.item:hover {
   nav,
   .aplayer .aplayer-info,
   .items,
+  .dropBtn,
+  .menu,
   .markdown-body,
   .markdown-body img {
     background: #131313 !important;
+  }
+  .menu a:hover {
+    background: #626262;
+  }
+  .menu-container:hover .dropBtn {
+    background: #797979 !important;
   }
   .aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon:hover path {
     fill: #a2a2a2 !important;
