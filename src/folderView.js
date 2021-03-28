@@ -66,7 +66,7 @@ export async function renderFolderView(items, path, request, directDl) {
       'menu-container',
       el(
         'button',
-        ['onclick="toggleDropdown()"', 'class="dropBtn"', 'id=menuBtn'],
+        ['class="dropBtn"', 'id=menuBtn'],
         '<i class="fas fa-bars"></i>'
       ) + 
       el(
