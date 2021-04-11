@@ -59,6 +59,8 @@ export async function renderFolderView(items, path, request, directDl) {
   let readmeExists = false
   let readmeFetchUrl = ''
 
+  let collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+
   const body = div(
     'container',
     div('path', renderPath(path, directDl)) +
@@ -85,6 +87,7 @@ export async function renderFolderView(items, path, request, directDl) {
         ['style="min-width: 600px"'],
         (!isIndex ? item('far fa-folder', '..', `${path}..`) : '') +
         items
+          .sort((a,b) => (('file' in a) - ('file' in b)) || collator.compare(a.name, b.name))
           .map(i => {
             // Check if the current item is a folder or a file
             if ('folder' in i) {
